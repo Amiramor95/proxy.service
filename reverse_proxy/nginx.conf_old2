@@ -1,0 +1,151 @@
+worker_processes 1;
+
+events { worker_connections 1024; }
+
+tcp {
+  upstream db_cluster {
+    server 192.168.2.67:3306;
+    check interval=3000 rise=2 fall=5 timeout=1000;
+  }
+}
+
+http {
+
+    sendfile on;
+
+    upstream docker-auth {
+        server fimmserv_auth:8080;
+    }
+    
+    upstream docker-module0 {
+    	server fimmserv_module0:80;
+    }
+
+    upstream docker-module1 {
+    	server fimmserv_module1:80;
+    }
+
+    upstream docker-module2 {
+    	server fimmserv_module2:80;
+    }
+
+    upstream docker-module3 {
+    	server fimmserv_module3:80;
+    }
+
+    upstream docker-module4 {
+    	server fimmserv_module4:80;
+    }
+
+    upstream docker-module5 {
+    	server fimmserv_module5:80;
+    }
+
+    upstream docker-module6 {
+    	server fimmserv_module6:80;
+    }
+
+    upstream docker-module7 {
+    	server fimmserv_module7:80;
+    }
+
+    server {
+	listen 3307;
+	proxy_pass db_cluster;
+    }
+
+    server {
+        listen 80;
+        
+        # location /auth {
+        #     proxy_pass http://192.168.2.66:8008;
+        #     proxy_redirect     off;
+        #     proxy_set_header   Host $host;
+        #     proxy_set_header   X-Real-IP $remote_addr;
+        #     proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        #     proxy_set_header   X-Forwarded-Host $server_name;
+        # }
+
+        location /auth {
+            proxy_pass         http://docker-auth;
+            proxy_redirect     off;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host $server_name;
+        }
+
+        location /api/module0 {
+            proxy_pass http://docker-module0;
+            proxy_redirect     off;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host $server_name;
+        }
+
+        location /api/module1 {
+            proxy_pass http://docker-module1;
+            proxy_redirect     off;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host $server_name;
+        }
+
+        location /api/module2 {
+            proxy_pass http://docker-module2;
+            proxy_redirect     off;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host $server_name;
+        }
+
+        location /api/module3 {
+            proxy_pass http://docker-module3;
+            proxy_redirect     off;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host $server_name;
+        }
+
+        location /api/module4 {
+            proxy_pass http://docker-module4;
+            proxy_redirect     off;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host $server_name;
+        }
+
+        location /api/module5 {
+            proxy_pass http://docker-module5;
+            proxy_redirect     off;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host $server_name;
+        }
+
+        location /api/module6 {
+            proxy_pass http://docker-module6;
+            proxy_redirect     off;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host $server_name;
+        }
+
+        location /api/module7 {
+            proxy_pass http://docker-module7;
+            proxy_redirect     off;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host $server_name;
+        }
+    
+    }
+}

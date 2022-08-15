@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  # Proxies requests to internal services
+  reverse_proxy:
+    image: nginx:1.17.10
+    container_name: reverse_proxy
+    volumes:
+      - .:/usr/share/nginx/html
+      - ./reverse_proxy/nginx.conf:/etc/nginx/nginx.conf
+      - ./certs:/etc/nginx/certs
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+networks:
+  default:
+    external:
+      name: fimm_network
